@@ -1,4 +1,4 @@
-package com.kotlin.unischedule
+package com.example.kotlin
 
 import org.junit.Test
 

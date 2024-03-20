@@ -1,4 +1,4 @@
-package com.kotlin.unischedule.ui.theme
+package com.example.kotlin.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
