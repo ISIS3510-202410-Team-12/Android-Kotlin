@@ -8,10 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -22,25 +20,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.example.kotlin.ui.theme.KotlinTheme
 import java.time.LocalDate
 import java.util.*
 import java.time.format.TextStyle as TextStyle1
@@ -72,9 +61,14 @@ fun CalendarView(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = Color(0xFF89C4F4))
-            .padding(16.dp)
     ) {
+        // Agrega la imagen de fondo aquí
+        Image(
+            painter = painterResource(id = R.drawable.bg), // Reemplaza con la ruta de tu imagen
+            contentDescription = null, // Puedes agregar una descripción si es necesario
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // Ajusta la escala de la imagen según tus necesidades
+        )
         Column {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -125,7 +119,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(300.dp)
                 .height(90.dp)
-                .offset(y = (-170).dp),
+                .offset(y = (-133).dp),
             offsetX = 5.dp // Ahora es 50.dp en lugar de solo 50
 
         )
@@ -134,7 +128,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (-62).dp),
+                .offset(y = (-33).dp),
             offsetX = 0.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -143,7 +137,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (153).dp),
+                .offset(y = (168).dp),
             offsetX = 6.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -152,7 +146,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (153).dp),
+                .offset(y = (168).dp),
             offsetX = 206.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
