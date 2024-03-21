@@ -8,19 +8,29 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin.ui.theme.KotlinTheme
+import com.example.kotlin.ui.theme.poppinsFontFamily
 
 
 class MainActivity : ComponentActivity() {
@@ -93,15 +103,34 @@ class MainActivity : ComponentActivity() {
                     selected = selectedDestination == destinations.route,
                     onClick = { navigateTopLevelDestination(destinations) },
                     icon = {
-                        Icon(
-                            imageVector = destinations.selectedIcon,
-                            contentDescription = stringResource(id = destinations.iconTextId)
-                        )
-                    })
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Agregado Column para permitir el texto debajo del ícono
+                            Icon(
+                                painter = painterResource(id = destinations.selectedIcon),
+                                contentDescription = stringResource(id = destinations.iconTextId),
+                                modifier = Modifier.size(24.dp), // Ajusta el tamaño según tus necesidades
+                                tint = if (selectedDestination == destinations.route) Color(
+                                    android.graphics.Color.parseColor(
+                                        "#9dcc18"
+                                    )
+                                ) else Color(android.graphics.Color.parseColor("#9fa5c0"))
+                            )
+                            Text(
+                                stringResource(id = destinations.iconTextId),
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = if (selectedDestination == destinations.route) Color(
+                                        android.graphics.Color.parseColor(
+                                            "#9dcc18"
+                                        )
+                                    ) else Color(android.graphics.Color.parseColor("#9fa5c0")),
+                                    fontFamily = poppinsFontFamily, fontWeight = FontWeight.SemiBold
+                                )
+                            ) // Agregado Text debajo del ícono
+                        }
+                    }
+                )
             }
         }
-
     }
 }
-
 

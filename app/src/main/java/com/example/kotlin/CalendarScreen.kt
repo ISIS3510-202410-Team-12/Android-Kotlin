@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,9 +50,13 @@ fun CalendarScreen() {
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+            Icon(
+                painter = painterResource(id = R.drawable.plus),
+                contentDescription = "Add",
+                modifier = Modifier
+                    .size(24.dp) // Ajusta el tamaño según tus necesidades
+            )
         }
-
     }
 }
 
@@ -78,14 +83,14 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = { /*TODO: Implementar la lógica para ir a esa pestaña*/ }) {
-                    Text("notif")
-                }
+                BarsIconButton(
+                    onClick = { /*TODO: Implement the logic for the button click*/ }
+                )
                 Text(
                     text = LocalDate.now().month.getDisplayName(TextStyle1.FULL, Locale.getDefault()),
                     style = TextStyle(fontSize = 24.sp, color = Color.White, fontFamily = poppinsFontFamily, fontWeight = FontWeight.SemiBold),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.offset(x = -30.dp, y = 10.dp) // Desplazamiento horizontal de 20 píxeles
+                    modifier = Modifier.offset(x = -90.dp, y = 10.dp) // Desplazamiento horizontal de 20 píxeles
                 )
                 BellIconButton(
                     onClick = { /*TODO: Implement the logic for the button click*/ }
@@ -124,8 +129,8 @@ fun CalendarView(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.Center)
                 .width(300.dp)
-                .height(90.dp)
-                .offset(y = (-133).dp),
+                .height(80.dp)
+                .offset(y = (-148).dp),
             offsetX = 5.dp // Ahora es 50.dp en lugar de solo 50
 
         )
@@ -134,7 +139,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (-33).dp),
+                .offset(y = (-42).dp),
             offsetX = 0.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -143,7 +148,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (168).dp),
+                .offset(y = (159).dp),
             offsetX = 6.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -152,7 +157,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (168).dp),
+                .offset(y = (159).dp),
             offsetX = 200.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -170,6 +175,23 @@ fun BellIconButton(
         content = {
             Icon(
                 painter = bellIcon,
+                contentDescription = "Bell Icon",
+                tint = Color.White // You can change the tint color if desired
+            )
+        }
+    )
+}
+
+@Composable
+fun BarsIconButton(
+    onClick: () -> Unit
+) {
+    val barsIcon = painterResource(id = R.drawable.bars)
+    IconButton(
+        onClick = onClick,
+        content = {
+            Icon(
+                painter = barsIcon,
                 contentDescription = "Bell Icon",
                 tint = Color.White // You can change the tint color if desired
             )
@@ -232,19 +254,25 @@ fun BlockGrid(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Block(
-            text = "MOS",
+            text1 = "8:00",
+            text2 = "MOS",
+            text3 = "9:50",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
         )
         Block(
-            text = "MOS",
+            text1 = "8:00",
+            text2 = "MOS",
+            text3 = "9:50",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
         )
         Block(
-            text = "MOS",
+            text1 = "8:00",
+            text2 = "MOS",
+            text3 = "9:50",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
@@ -254,7 +282,9 @@ fun BlockGrid(
 
 @Composable
 fun Block(
-    text: String,
+    text1: String,
+    text2: String,
+    text3: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -266,14 +296,30 @@ fun Block(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
+            .padding(10.dp)
     ) {
         Text(
-            text = text,
+            text = text1,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+                .offset(x = -10.dp, y = -18.dp)
+        )
+        Text(
+            text = text2,
             color = Color.White,
             fontSize = 8.sp,
-            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        Text(
+            text = text3,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -290,13 +336,17 @@ fun BlockGridLym(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         BlockLym(
-            text = "LyM",
+            text1 = "10:00",
+            text2 = "Lym",
+            text3 = "11:30",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
         )
         BlockLym(
-            text = "LyM",
+            text1 = "10:00",
+            text2 = "Lym",
+            text3 = "11:30",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
@@ -306,7 +356,9 @@ fun BlockGridLym(
 
 @Composable
 fun BlockLym(
-    text: String,
+    text1: String,
+    text2: String,
+    text3: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -318,14 +370,30 @@ fun BlockLym(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
+            .padding(10.dp)
     ) {
         Text(
-            text = text,
+            text = text1,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+                .offset(x = -10.dp, y = -18.dp)
+        )
+        Text(
+            text = text2,
             color = Color.White,
             fontSize = 8.sp,
-            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        Text(
+            text = text3,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -343,7 +411,9 @@ fun BlockGridDSW(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         BlockDSW(
-            text = "DSW",
+            text1 = "14:00",
+            text2 = "DSW",
+            text3 = "15:30",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
@@ -353,7 +423,9 @@ fun BlockGridDSW(
 
 @Composable
 fun BlockDSW(
-    text: String,
+    text1: String,
+    text2: String,
+    text3: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -365,14 +437,30 @@ fun BlockDSW(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
+            .padding(10.dp)
     ) {
         Text(
-            text = text,
+            text = text1,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+                .offset(x = -10.dp, y = -18.dp)
+        )
+        Text(
+            text = text2,
             color = Color.White,
             fontSize = 8.sp,
-            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        Text(
+            text = text3,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -390,7 +478,9 @@ fun BlockGridSoccer(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         BlockSoccer(
-            text = "Soccer",
+            text1 = "14:00",
+            text2 = "Soccer",
+            text3 = "15:30",
             modifier = Modifier
                 .width(43.dp)
                 .height(120.dp)
@@ -400,7 +490,9 @@ fun BlockGridSoccer(
 
 @Composable
 fun BlockSoccer(
-    text: String,
+    text1: String,
+    text2: String,
+    text3: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -412,14 +504,30 @@ fun BlockSoccer(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(5.dp),
-        contentAlignment = Alignment.Center
+            .padding(10.dp)
     ) {
         Text(
-            text = text,
+            text = text1,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+                .offset(x = -10.dp, y = -17.dp)
+        )
+        Text(
+            text = text2,
             color = Color.White,
             fontSize = 8.sp,
-            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        Text(
+            text = text3,
+            color = Color.White,
+            fontSize = 5.sp,
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
