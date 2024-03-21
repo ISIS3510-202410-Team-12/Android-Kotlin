@@ -1,6 +1,7 @@
 package com.example.kotlin
 
 import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,7 @@ import com.example.kotlin.ui.theme.KotlinTheme
 
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(VERSION_CODES.O)
     @Composable
     fun MyAppContent(
         modifier: Modifier = Modifier,

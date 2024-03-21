@@ -20,16 +20,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.kotlin.ui.theme.poppinsFontFamily
 import java.time.LocalDate
 import java.util.*
 import java.time.format.TextStyle as TextStyle1
@@ -75,15 +79,17 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(onClick = { /*TODO: Implementar la lógica para ir a esa pestaña*/ }) {
-                    Text("barra")
+                    Text("notif")
                 }
                 Text(
                     text = LocalDate.now().month.getDisplayName(TextStyle1.FULL, Locale.getDefault()),
-                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    style = TextStyle(fontSize = 24.sp, color = Color.White, fontFamily = poppinsFontFamily, fontWeight = FontWeight.SemiBold),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.offset(x = -30.dp, y = 10.dp) // Desplazamiento horizontal de 20 píxeles
                 )
-                Button(onClick = { /*TODO: Implementar la lógica para ir a esa pestaña*/ }) {
-                    Text("notif")
-                }
+                BellIconButton(
+                    onClick = { /*TODO: Implement the logic for the button click*/ }
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -94,7 +100,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 repeat(7) { day ->
                     Text(
                         text = getDayOfWeekAbbreviation(day),
-                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        style = TextStyle(fontSize = 16.sp, color = Color.White, fontFamily = poppinsFontFamily, fontWeight = FontWeight.Bold)
                     )
                 }
             }
@@ -106,7 +112,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 repeat(7) { day ->
                     Text(
                         text = getDayOfmonthAbbreviation(day),
-                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        style = TextStyle(fontSize = 16.sp, color = Color.White, fontFamily = poppinsFontFamily, fontWeight = FontWeight.Bold)
                     )
                 }
             }
@@ -147,11 +153,28 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .width(200.dp)
                 .height(90.dp)
                 .offset(y = (168).dp),
-            offsetX = 206.dp,
+            offsetX = 200.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
 
     }
+}
+
+@Composable
+fun BellIconButton(
+    onClick: () -> Unit
+) {
+    val bellIcon = painterResource(id = R.drawable.bell)
+    IconButton(
+        onClick = onClick,
+        content = {
+            Icon(
+                painter = bellIcon,
+                contentDescription = "Bell Icon",
+                tint = Color.White // You can change the tint color if desired
+            )
+        }
+    )
 }
 
 private fun getDayOfWeekAbbreviation(dayOfWeek: Int): String {
@@ -191,7 +214,7 @@ fun HourlyGrid() {
                     .height(50.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = if (hour < 10) "0$hour:00" else "$hour:00", fontSize = 12.sp)
+                Text(text = if (hour < 10) "0$hour:00" else "$hour:00", fontSize = 12.sp, color = Color.White, fontFamily = poppinsFontFamily, fontWeight = FontWeight.SemiBold)
                 Divider(color = Color.White, thickness = 1.dp)
             }
         }
@@ -211,19 +234,19 @@ fun BlockGrid(
         Block(
             text = "MOS",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
         Block(
             text = "MOS",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
         Block(
             text = "MOS",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
     }
@@ -250,7 +273,7 @@ fun Block(
             text = text,
             color = Color.White,
             fontSize = 8.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
         )
     }
 }
@@ -269,13 +292,13 @@ fun BlockGridLym(
         BlockLym(
             text = "LyM",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
         BlockLym(
             text = "LyM",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
     }
@@ -302,7 +325,7 @@ fun BlockLym(
             text = text,
             color = Color.White,
             fontSize = 8.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
         )
     }
 }
@@ -322,7 +345,7 @@ fun BlockGridDSW(
         BlockDSW(
             text = "DSW",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
     }
@@ -349,7 +372,7 @@ fun BlockDSW(
             text = text,
             color = Color.White,
             fontSize = 8.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
         )
     }
 }
@@ -369,7 +392,7 @@ fun BlockGridSoccer(
         BlockSoccer(
             text = "Soccer",
             modifier = Modifier
-                .width(40.dp)
+                .width(43.dp)
                 .height(120.dp)
         )
     }
@@ -396,7 +419,7 @@ fun BlockSoccer(
             text = text,
             color = Color.White,
             fontSize = 8.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = poppinsFontFamily, fontWeight = FontWeight.Normal
         )
     }
 }
