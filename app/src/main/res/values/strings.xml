@@ -5,6 +5,11 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="home">Home</string>
+    <string name="calendar">Calendar</string>
+    <string name="friends">Friends</string>
+    <string name="groups">Groups</string>
+
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -43,4 +48,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_horario">Horario</string>
+    <string name="title_activity_calendar_screen">CalendarScreen</string>
 </resources>
