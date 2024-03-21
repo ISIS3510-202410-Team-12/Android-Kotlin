@@ -290,7 +290,7 @@ fun Block(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFF8F98FF))
+            .background(Color(0xFF8F98FF).copy(alpha = 0.6f))
             .border(
                 width = 1.dp,
                 color = Color.Transparent,
@@ -364,7 +364,7 @@ fun BlockLym(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFFF7648))
+            .background(Color(0xFFFF7648).copy(alpha = 0.6f))
             .border(
                 width = 1.dp,
                 color = Color.Transparent,
@@ -431,7 +431,7 @@ fun BlockDSW(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFFF7878))
+            .background(Color(0xFFFF7878).copy(alpha = 0.6f))
             .border(
                 width = 1.dp,
                 color = Color.Transparent,
@@ -498,7 +498,7 @@ fun BlockSoccer(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFF78BEFF))
+            .background(Color(0xFF78BEFF).copy(alpha = 0.6f))
             .border(
                 width = 1.dp,
                 color = Color.Transparent,
