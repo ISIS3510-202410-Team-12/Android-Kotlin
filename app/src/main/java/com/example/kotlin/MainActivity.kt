@@ -5,30 +5,31 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin.ui.theme.KotlinTheme
 import com.example.kotlin.ui.theme.poppinsFontFamily
@@ -40,49 +41,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KotlinTheme {
-                val navController = rememberNavController()
-                val navigateAction = remember(navController) {
-                    MyAppNavigationActions(navController)
-                }
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val selectedDestination = navBackStackEntry?.destination?.route ?: MyAppRoute.HOME
-
-                MyAppContent(
-                    navController = navController,
-                    selectedDestination = selectedDestination,
-                    navigateTopLevelDestination = navigateAction::navigateTo
-                )
-            }
-        }
-    }
-
-    @RequiresApi(VERSION_CODES.O)
-    @Composable
-    fun MyAppContent(
-        modifier: Modifier = Modifier,
-        navController: NavHostController,
-        selectedDestination: String,
-        navigateTopLevelDestination: (MyAppTopLevelDestination) -> Unit
-    ) {
-        Row(modifier = modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                NavHost(
-                    modifier = Modifier.weight(1f),
-                    navController = navController,
-                    startDestination = MyAppRoute.HOME
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    composable(MyAppRoute.HOME) {
-                        HomeScreen()
-                    }
-                    composable(MyAppRoute.CALENDAR) {
-                        CalendarScreen()
-                    }
-                    composable(MyAppRoute.FRIENDS) {
-                        FriendScreen()
-                    }
-                    composable(MyAppRoute.GROUP) {
-                        GroupScreen()
-                    }
+                    NavigationBar()
                 }
                 MyAppBottomNavigation(
                     selectedDestination = selectedDestination,
@@ -92,46 +54,80 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+sealed class Screens (val screen: String) {
+    data object HomeScreen: Screens("home")
+    data object CalendarScreen: Screens("calendar")
+    data object FriendsScreen: Screens("friends")
+    data object GroupsScreen: Screens("groups")
+}
 
-    @Composable
-    fun MyAppBottomNavigation(
-        selectedDestination: String,
-        navigateTopLevelDestination: (MyAppTopLevelDestination) -> Unit
-    ) {
-        NavigationBar(modifier = Modifier.fillMaxWidth()) {
-            TOP_LEVEL_DESTINATIONS.forEach { destinations ->
-                NavigationBarItem(
-                    selected = selectedDestination == destinations.route,
-                    onClick = { navigateTopLevelDestination(destinations) },
-                    icon = {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Agregado Column para permitir el texto debajo del ícono
+data class NavItem (
+    val icon: Int,
+    val label: String,
+    val screen: String
+)
+
+val navItems = listOf(
+    NavItem(R.drawable.ic_house, "Home", Screens.HomeScreen.screen),
+    NavItem(R.drawable.ic_calendar, "Calendar", Screens.CalendarScreen.screen),
+    NavItem(R.drawable.ic_address_book, "Friends", Screens.FriendsScreen.screen),
+    NavItem(R.drawable.ic_user_group, "Groups", Screens.GroupsScreen.screen)
+)
+
+@Composable
+fun NavigationBar() {
+    val navigationController = rememberNavController()
+    val selected = remember { mutableIntStateOf(R.drawable.ic_house) }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            BottomAppBar (
+                containerColor = MaterialTheme.colorScheme.onBackground,
+            ){
+                navItems.forEach { item ->
+                    IconButton(
+                        onClick = {
+                            selected.intValue = item.icon
+                            navigationController.navigate(item.screen) {
+                                popUpTo(0)
+                            }
+                        },
+                        modifier = Modifier.weight(1f).fillMaxSize()
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             Icon(
-                                painter = painterResource(id = destinations.selectedIcon),
-                                contentDescription = stringResource(id = destinations.iconTextId),
-                                modifier = Modifier.size(24.dp), // Ajusta el tamaño según tus necesidades
-                                tint = if (selectedDestination == destinations.route) Color(
-                                    android.graphics.Color.parseColor(
-                                        "#9dcc18"
-                                    )
-                                ) else Color(android.graphics.Color.parseColor("#9fa5c0"))
+                                painter = painterResource(id = item.icon),
+                                contentDescription = item.label,
+                                modifier = Modifier.size(26.dp),
+                                tint = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                             )
                             Text(
-                                stringResource(id = destinations.iconTextId),
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = if (selectedDestination == destinations.route) Color(
-                                        android.graphics.Color.parseColor(
-                                            "#9dcc18"
-                                        )
-                                    ) else Color(android.graphics.Color.parseColor("#9fa5c0")),
-                                    fontFamily = poppinsFontFamily, fontWeight = FontWeight.SemiBold
-                                )
-                            ) // Agregado Text debajo del ícono
+                                text = item.label,
+                                color = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         }
                     }
-                )
+                }
             }
+        }
+    ) { paddingValues ->
+        NavHost(
+            navController = navigationController,
+            startDestination = Screens.HomeScreen.screen,
+            modifier = Modifier.padding(paddingValues),
+            enterTransition = { -> fadeIn(animationSpec = tween(200)) },
+            exitTransition = { -> fadeOut(animationSpec = tween(200)) }
+        ){
+            composable(Screens.HomeScreen.screen){HomeScreen()}
+            composable(Screens.CalendarScreen.screen){CalendarScreen()}
+            composable(Screens.FriendsScreen.screen){FriendsScreen()}
+            composable(Screens.GroupsScreen.screen){GroupsScreen()}
         }
     }
 }
-
