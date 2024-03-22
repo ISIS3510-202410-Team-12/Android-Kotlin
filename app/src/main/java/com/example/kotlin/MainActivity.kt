@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +38,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -118,29 +124,53 @@ class MainActivity : AppCompatActivity() {
         onAuthSuccess: () -> Unit
     ) {
         var auth by remember { mutableStateOf(false) }
-
-        Column(
+        Box(
             modifier = Modifier
-                .background(Color.Red)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .paint(
+                    painterResource(id = R.drawable.bg),
+                    contentScale = ContentScale.Crop
+                )
         ) {
-            Text(text = "Auth Screen", fontSize = 22.sp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = "UniSchedule", fontSize = 22.sp, color = MaterialTheme.colorScheme.onBackground)
 
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(20.dp))
 
-            Button(
-                onClick = {
-                    authenticate { success ->
-                        auth = success
-                        if (success) {
-                            onAuthSuccess()
+                Text(
+                    text = "Welcome Laura!",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 30.sp,
+                        shadow = Shadow(
+                            color = Color(0xFF000000),
+                            offset = Offset(10f, 10f),
+                            blurRadius = 15f
+                        )
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(Modifier.height(500.dp))
+
+                Button(
+                    //modifier = Modifier.background(Color(0xFF1A73E8)),
+                    onClick = {
+                        authenticate { success ->
+                            auth = success
+                            if (success) {
+                                onAuthSuccess()
+                            }
                         }
                     }
+                ) {
+                    Text(text = "Biometric Login")
                 }
-            ) {
-                Text(text = "Login")
             }
         }
     }
@@ -185,7 +215,9 @@ fun NavigationBar() {
                                 popUpTo(0)
                             }
                         },
-                        modifier = Modifier.weight(1f).fillMaxSize()
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize()
                     ) {
                         Column(
                             modifier = Modifier.fillMaxSize(),
