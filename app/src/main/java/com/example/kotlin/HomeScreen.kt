@@ -262,5 +262,4 @@ fun WhiteSpace() {
                 .offset(y = (15).dp)
         )
     }
-
 }

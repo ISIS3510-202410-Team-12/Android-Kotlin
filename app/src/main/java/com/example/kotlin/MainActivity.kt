@@ -1,5 +1,7 @@
 package com.example.kotlin
 
+import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,8 +32,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin.ui.theme.KotlinTheme
+import com.example.kotlin.ui.theme.poppinsFontFamily
 
-class MainActivity : ComponentActivity() {
+
+class MainActivity : AppCompatActivity() {
+    @RequiresApi(VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,10 +46,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavigationBar()
                 }
+                MyAppBottomNavigation(
+                    selectedDestination = selectedDestination,
+                    navigateTopLevelDestination = navigateTopLevelDestination
+                )
             }
         }
     }
-}
 
 sealed class Screens (val screen: String) {
     data object HomeScreen: Screens("home")
@@ -121,14 +129,5 @@ fun NavigationBar() {
             composable(Screens.FriendsScreen.screen){FriendsScreen()}
             composable(Screens.GroupsScreen.screen){GroupsScreen()}
         }
-    }
-}
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    KotlinTheme {
-        NavigationBar()
     }
 }

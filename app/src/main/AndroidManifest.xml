@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlin"
         tools:targetApi="31">
+        <activity
+            android:name=".CalendarScreen"
+            android:exported="false"
+            android:label="@string/title_activity_calendar_screen"
+            android:theme="@style/Theme.Kotlin" />
+        <activity
+            android:name=".Horario"
+            android:exported="false"
+            android:label="@string/title_activity_horario"
+            android:theme="@style/Theme.Kotlin" />
+        <activity
+            android:name=".horario"
+            android:exported="false"
+            android:theme="@style/Theme.Kotlin" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
