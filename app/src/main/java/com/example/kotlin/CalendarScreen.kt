@@ -54,7 +54,7 @@ fun CalendarScreen() {
                 painter = painterResource(id = R.drawable.plus),
                 contentDescription = "Add",
                 modifier = Modifier
-                    .size(24.dp) // Ajusta el tamaño según tus necesidades
+                    .size(24.dp) // 
             )
         }
     }
