@@ -40,15 +40,16 @@ fun CalendarScreen() {
         CalendarView()
         FloatingActionButton(
             onClick = { /*TODO: Handle click*/ },
+            containerColor = Color.Transparent,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_plus),
+                painter = painterResource(id = R.drawable.ic_square_plus),
                 contentDescription = "Add",
                 modifier = Modifier
-                    .size(24.dp) //
+                    .size(60.dp) //
             )
         }
     }
@@ -70,7 +71,8 @@ fun CalendarView(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.bg), // Reemplaza con la ruta de tu imagen
             contentDescription = null, // Puedes agregar una descripción si es necesario
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop // Ajusta la escala de la imagen según tus necesidades
+            contentScale = ContentScale.Crop, // Ajusta la escala de la imagen según tus necesidades
+            alpha = 0.75f // Ajusta la opacidad de la imagen
         )
         Column {
             Row(
@@ -124,7 +126,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(300.dp)
                 .height(80.dp)
-                .offset(y = (-148).dp),
+                .offset(y = (-193).dp),
             offsetX = 5.dp // Ahora es 50.dp en lugar de solo 50
 
         )
@@ -133,7 +135,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (-42).dp),
+                .offset(y = (-72).dp),
             offsetX = 0.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -142,7 +144,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (159).dp),
+                .offset(y = (161).dp),
             offsetX = 6.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -151,7 +153,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .width(200.dp)
                 .height(90.dp)
-                .offset(y = (159).dp),
+                .offset(y = (161).dp),
             offsetX = 200.dp,
             horizontalSpacing = 13.dp // Espacio horizontal entre bloques en BlockGridLym
         )
@@ -166,10 +168,12 @@ fun BellIconButton(
     val bellIcon = painterResource(id = R.drawable.ic_bell)
     IconButton(
         onClick = onClick,
+        modifier = Modifier.padding(6.dp),
         content = {
             Icon(
                 painter = bellIcon,
                 contentDescription = "Bell Icon",
+                modifier = Modifier.size(25.dp),
                 tint = Color.White // You can change the tint color if desired
             )
         }
@@ -183,10 +187,12 @@ fun BarsIconButton(
     val barsIcon = painterResource(id = R.drawable.ic_bars)
     IconButton(
         onClick = onClick,
+        modifier = Modifier.padding(6.dp),
         content = {
             Icon(
                 painter = barsIcon,
                 contentDescription = "Bell Icon",
+                modifier = Modifier.size(25.dp),
                 tint = Color.White // You can change the tint color if desired
             )
         }
@@ -290,7 +296,7 @@ fun Block(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
         Text(
             text = text1,
@@ -298,7 +304,6 @@ fun Block(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
-                .offset(x = -10.dp, y = -18.dp)
         )
         Text(
             text = text2,
@@ -313,7 +318,6 @@ fun Block(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
-                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -364,7 +368,7 @@ fun BlockLym(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
         Text(
             text = text1,
@@ -372,7 +376,6 @@ fun BlockLym(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
-                .offset(x = -10.dp, y = -18.dp)
         )
         Text(
             text = text2,
@@ -387,7 +390,6 @@ fun BlockLym(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
-                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -431,7 +433,7 @@ fun BlockDSW(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
         Text(
             text = text1,
@@ -439,7 +441,6 @@ fun BlockDSW(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
-                .offset(x = -10.dp, y = -18.dp)
         )
         Text(
             text = text2,
@@ -454,7 +455,6 @@ fun BlockDSW(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
-                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
@@ -498,7 +498,7 @@ fun BlockSoccer(
                 color = Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
         Text(
             text = text1,
@@ -506,7 +506,6 @@ fun BlockSoccer(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
-                .offset(x = -10.dp, y = -17.dp)
         )
         Text(
             text = text2,
@@ -521,7 +520,6 @@ fun BlockSoccer(
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
             modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
-                .offset(x = 10.dp, y = 18.dp)
         )
     }
 }
