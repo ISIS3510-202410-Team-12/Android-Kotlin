@@ -33,7 +33,7 @@ fun HomeScreen() {
             contentDescription = "Background",
             alignment = Alignment.TopStart,
             contentScale = ContentScale.Crop,
-            alpha = 0.8f
+            alpha = 0.75f
         )
     }
         Column (

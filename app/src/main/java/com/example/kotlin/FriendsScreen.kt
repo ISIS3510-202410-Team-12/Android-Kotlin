@@ -5,6 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun FriendsScreen() {
@@ -13,6 +14,9 @@ fun FriendsScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Friends")
+        Text(
+            text = "Friends",
+            color = Color(0xFF000000)
+        )
     }
 }
