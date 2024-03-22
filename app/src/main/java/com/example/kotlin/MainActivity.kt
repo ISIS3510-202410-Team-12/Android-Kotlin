@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,60 +50,109 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Set the screen orientation to portrait
         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT.also { requestedOrientation = it }
+
+        setupAuth()
+
         setContent {
+            val isAuthenticated = rememberSaveable { mutableStateOf(false) }
+
             KotlinTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    val authSuccessful = rememberSaveable { mutableStateOf(false) }
-                    if (authSuccessful.value) {
+                    if (isAuthenticated.value) {
                         NavigationBar()
                     } else {
                         Auth(
-                            //onAuthSuccess = { authSuccessful.value = true }
+                            onAuthSuccess = { isAuthenticated.value = true }
                         )
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-fun Auth() {
+    private var canAuthenticate = false
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    var auth by remember { mutableStateOf(false) }
+    private fun setupAuth() {
+        // Setup authentication
+        if (BiometricManager.from(this).canAuthenticate(
+                BiometricManager.Authenticators.BIOMETRIC_STRONG
+                        or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            ) == BiometricManager.BIOMETRIC_SUCCESS
+        ) {
+            canAuthenticate = true
 
-    Column (
-        modifier = Modifier.background(Color.Red)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for my app")
+                .setSubtitle("Log in using your biometric credential")
+                .setAllowedAuthenticators(
+                    BiometricManager.Authenticators.BIOMETRIC_STRONG
+                            or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                )
+                .build()
+        }
+    }
+
+    private fun authenticate(auth: (auth: Boolean) -> Unit) {
+        if (canAuthenticate) {
+            BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        auth(true)
+                    }
+
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                        auth(false)
+                    }
+                }).authenticate(promptInfo)
+        }
+    }
+
+    @Composable
+    fun Auth(
+        onAuthSuccess: () -> Unit
     ) {
-        Text(text = "Auth Screen", fontSize = 22.sp)
+        var auth by remember { mutableStateOf(false) }
 
-        Spacer(Modifier.height(8.dp))
+        Column(
+            modifier = Modifier
+                .background(Color.Red)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = "Auth Screen", fontSize = 22.sp)
 
-        Button(onClick = {
+            Spacer(Modifier.height(8.dp))
 
-        }) {
-            Text(text = "Login")
+            Button(
+                onClick = {
+                    authenticate { success ->
+                        auth = success
+                        if (success) {
+                            onAuthSuccess()
+                        }
+                    }
+                }
+            ) {
+                Text(text = "Login")
+            }
         }
     }
 }
-
-
-
-sealed class Screens (val screen: String) {
-    data object HomeScreen: Screens("home")
-    data object CalendarScreen: Screens("calendar")
-    data object FriendsScreen: Screens("friends")
-    data object GroupsScreen: Screens("groups")
+sealed class Screens(val screen: String) {
+    data object HomeScreen : Screens("home")
+    data object CalendarScreen : Screens("calendar")
+    data object FriendsScreen : Screens("friends")
+    data object GroupsScreen : Screens("groups")
 }
 
-data class NavItem (
+data class NavItem(
     val icon: Int,
     val label: String,
     val screen: String
@@ -122,9 +174,9 @@ fun NavigationBar() {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            BottomAppBar (
+            BottomAppBar(
                 containerColor = MaterialTheme.colorScheme.onBackground,
-            ){
+            ) {
                 navItems.forEach { item ->
                     IconButton(
                         onClick = {
@@ -161,13 +213,13 @@ fun NavigationBar() {
             navController = navigationController,
             startDestination = Screens.HomeScreen.screen,
             modifier = Modifier.padding(paddingValues),
-            enterTransition = { -> fadeIn(animationSpec = tween(200)) },
-            exitTransition = { -> fadeOut(animationSpec = tween(200)) }
-        ){
-            composable(Screens.HomeScreen.screen){HomeScreen()}
-            composable(Screens.CalendarScreen.screen){CalendarScreen()}
-            composable(Screens.FriendsScreen.screen){FriendsScreen()}
-            composable(Screens.GroupsScreen.screen){GroupsScreen()}
+            enterTransition = { fadeIn(animationSpec = tween(200)) },
+            exitTransition = { fadeOut(animationSpec = tween(200)) }
+        ) {
+            composable(Screens.HomeScreen.screen) { HomeScreen() }
+            composable(Screens.CalendarScreen.screen) { CalendarScreen() }
+            composable(Screens.FriendsScreen.screen) { FriendsScreen() }
+            composable(Screens.GroupsScreen.screen) { GroupsScreen() }
         }
     }
 }
