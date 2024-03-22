@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -33,7 +34,7 @@ import com.example.kotlin.ui.theme.KotlinTheme
 import com.example.kotlin.ui.theme.poppinsFontFamily
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     @RequiresApi(VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
