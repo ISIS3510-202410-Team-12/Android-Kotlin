@@ -34,7 +34,7 @@ class MyApplication: Application() {
 
 fun getFreeClassrooms(dayOfWeek: String, startTime: String, endTime: String) {
     val api = Retrofit.Builder()
-        .baseUrl("https://34.133.121.100:3000/")
+        .baseUrl("http://34.133.121.100:3000/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(MyApi::class.java)
@@ -43,9 +43,9 @@ fun getFreeClassrooms(dayOfWeek: String, startTime: String, endTime: String) {
         override fun onResponse(call: Call<List<Classroom>>, response: Response<List<Classroom>>) {
             if (response.isSuccessful) {
                 val classrooms = response.body()
-                Log.i("RESPUESTA", "onResponse: ${classrooms} ")
+                Log.i("RESPUESTA", "onResponse: $classrooms ")
             } else {
-                // Handle unsuccessful response
+                Log.i("RESPUESTA", "onResponse: Unsuccessful response, status code: ${response.code()} ")
             }
         }
         override fun onFailure(call: Call<List<Classroom>>, t: Throwable) {
