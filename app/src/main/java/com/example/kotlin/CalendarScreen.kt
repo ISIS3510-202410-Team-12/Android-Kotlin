@@ -18,7 +18,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.remember
+// import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -58,9 +58,9 @@ fun CalendarScreen() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarView(modifier: Modifier = Modifier) {
-    val currentMonth = remember { Calendar.getInstance().get(Calendar.MONTH) }
-    val daysInMonth = remember { Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH) }
-    val firstDayOfMonth = remember { Calendar.getInstance().apply { set(Calendar.DAY_OF_MONTH, 1) }.get(Calendar.DAY_OF_WEEK) }
+    //val currentMonth = remember { Calendar.getInstance().get(Calendar.MONTH) }
+    //val daysInMonth = remember { Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH) }
+    //val firstDayOfMonth = remember { Calendar.getInstance().apply { set(Calendar.DAY_OF_MONTH, 1) }.get(Calendar.DAY_OF_WEEK) }
 
     Box(
         modifier = modifier
@@ -86,7 +86,7 @@ fun CalendarView(modifier: Modifier = Modifier) {
                     text = LocalDate.now().month.getDisplayName(TextStyle1.FULL, Locale.getDefault()),
                     style = TextStyle(fontSize = 24.sp, color = Color.White,  fontWeight = FontWeight.SemiBold),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.offset(x = -90.dp, y = 10.dp) // Desplazamiento horizontal de 20 píxeles
+                    modifier = Modifier.offset(x = (-90).dp, y = 10.dp) // Desplazamiento horizontal de 20 píxeles
                 )
                 BellIconButton(
                     onClick = { /*TODO: Implement the logic for the button click*/ }

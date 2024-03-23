@@ -98,7 +98,7 @@ fun UserGreeting(name: String) {
             .padding(start = 26.dp, top = 15.dp)
     ){
         Text(
-            text = "Hola, $name!",
+            text = "Hello, $name!",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontSize = 45.sp,
                 shadow = Shadow(
@@ -109,7 +109,7 @@ fun UserGreeting(name: String) {
             ),
         )
         Text(
-            text = "Hola, $name!",
+            text = "Hello, $name!",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontSize = 45.sp,
                 color = Color(0xFF000000),
