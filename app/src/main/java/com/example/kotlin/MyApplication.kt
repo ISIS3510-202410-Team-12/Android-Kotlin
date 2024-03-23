@@ -4,21 +4,52 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MyApplication: Application() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
-        super.onCreate()
+        getFreeClassrooms("j","0900","1030")
 
-        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        super.onCreate()
+        val notificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notificationChannel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_DEFAULT
         )
-
         notificationManager.createNotificationChannel(notificationChannel)
+
     }
+}
+
+fun getFreeClassrooms(dayOfWeek: String, startTime: String, endTime: String) {
+    val api = Retrofit.Builder()
+        .baseUrl("https://34.133.121.100:3000/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(MyApi::class.java)
+
+    api.getFreeClassrooms(dayOfWeek, startTime, endTime).enqueue(object : Callback<List<Classroom>> {
+        override fun onResponse(call: Call<List<Classroom>>, response: Response<List<Classroom>>) {
+            if (response.isSuccessful) {
+                val classrooms = response.body()
+                Log.i("RESPUESTA", "onResponse: ${classrooms} ")
+            } else {
+                // Handle unsuccessful response
+            }
+        }
+        override fun onFailure(call: Call<List<Classroom>>, t: Throwable) {
+            Log.i("RESPUESTA", "onFailure:${t.message} ")
+        }
+    })
 }
