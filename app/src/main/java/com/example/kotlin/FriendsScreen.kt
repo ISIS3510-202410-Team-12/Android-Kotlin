@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.kotlin.ui.theme.KotlinTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -86,11 +87,13 @@ fun FriendsScreen() {
             filteredFriends.forEach { (name, avatarResId) ->
                 Text(
                     text ="$name $avatarResId",
-                    modifier =Modifier
+                    modifier = Modifier
                         .padding(16.dp)
                         .clickable {
-                            Toast.makeText(ctx, name, Toast.LENGTH_SHORT).show()
-                            active =false
+                            Toast
+                                .makeText(ctx, name, Toast.LENGTH_SHORT)
+                                .show()
+                            active = false
                         }
                 )
             }
@@ -114,14 +117,13 @@ fun TopButtonsFriends() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_bars),
-                tint = MaterialTheme.colors.background,
+                tint = MaterialTheme.colorScheme.background,
                 contentDescription = "Burger",
                 modifier = Modifier.size(25.dp)
             )
         }
         Text(
             text = "Friends",
-            style = MaterialTheme.typography,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         IconButton(
@@ -130,7 +132,7 @@ fun TopButtonsFriends() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_bell),
-                tint = MaterialTheme.colors.background,
+                tint = MaterialTheme.colorScheme.background,
                 contentDescription = "Notifications",
                 modifier = Modifier.size(25.dp)
             )
