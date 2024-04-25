@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
-class NetworkObserver(context: Context) : ConnectivityManager.NetworkCallback() {
+class NetworkObserverActivity(context: Context) : ConnectivityManager.NetworkCallback() {
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -21,7 +21,7 @@ class NetworkObserver(context: Context) : ConnectivityManager.NetworkCallback() 
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
 
-        connectivityManager.registerNetworkCallback(networkRequest, this@NetworkObserver)
+        connectivityManager.registerNetworkCallback(networkRequest, this@NetworkObserverActivity)
 
         val currentNetwork = connectivityManager.activeNetwork
         if (currentNetwork != null) {
@@ -30,7 +30,7 @@ class NetworkObserver(context: Context) : ConnectivityManager.NetworkCallback() 
             trySend(false)
         }
 
-        awaitClose { connectivityManager.unregisterNetworkCallback(this@NetworkObserver) }
+        awaitClose { connectivityManager.unregisterNetworkCallback(this@NetworkObserverActivity) }
     }
 
     override fun onAvailable(network: Network) {

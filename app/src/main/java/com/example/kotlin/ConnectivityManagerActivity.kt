@@ -1,12 +1,11 @@
 package com.example.kotlin
 
 import android.content.Context
-import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-class ConnectivityManager(private val context: Context) {
+class ConnectivityManagerActivity(private val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun isOnline(): Boolean {
