@@ -249,6 +249,42 @@ fun checkConnectivityStatusGroup(groups: List<Group>, sqliteHelperGroups: SQLite
                 GroupBox(group)
                 sqliteHelperGroups.insertGroup(group.name, group.userAvatars.joinToString()) // Inserta el grupo en la base de datos
             }
+            UserAvatars(element.userAvatars)
+            Text(
+                text = element.name,
+                modifier = Modifier.padding(start = 10.dp, top = 10.dp)
+            )
+        }
+    }
+}
+
+data class Group(
+    val name: String,
+    val primaryColor: Color,
+    val secondaryColor: Color,
+    val icon: Int,
+    val width: Int,
+    val userAvatars: List<Int>
+)
+
+@Composable
+fun UserAvatars(userAvatars: List<Int>) {
+    Row(
+        modifier = Modifier
+            .padding(start = 10.dp, top = 10.dp)
+            .size(40.dp),
+        horizontalArrangement = Arrangement.spacedBy((-10).dp)
+    ) {
+        userAvatars.forEachIndexed { index, avatarResId ->
+            Image(
+                painter = painterResource(id = avatarResId),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, Color.White, CircleShape)
+                    .offset(x = index * 20.dp)
+            )
         }
     }
 }
