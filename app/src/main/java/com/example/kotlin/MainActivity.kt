@@ -46,8 +46,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin.ui.theme.KotlinTheme
 import retrofit2.Call
@@ -183,6 +185,7 @@ sealed class Screens(val screen: String) {
     data object CalendarScreen : Screens("calendar")
     data object FriendsScreen : Screens("friends")
     data object GroupsScreen : Screens("groups")
+    data object AddEventScreen : Screens("add_event")
 }
 
 data class NavItem(
@@ -203,41 +206,43 @@ val navItems = listOf(
 fun NavigationBar() {
     val navigationController = rememberNavController()
     val selected = remember { mutableIntStateOf(R.drawable.ic_house) }
-
+    val currentRoute = navigationController.currentBackStackEntryAsState().value?.destination?.route
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.onBackground,
-            ) {
-                navItems.forEach { item ->
-                    IconButton(
-                        onClick = {
-                            selected.intValue = item.icon
-                            navigationController.navigate(item.screen) {
-                                popUpTo(0)
-                            }
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxSize()
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+            if (currentRoute == Screens.HomeScreen.screen || currentRoute == Screens.CalendarScreen.screen || currentRoute == Screens.FriendsScreen.screen || currentRoute == Screens.GroupsScreen.screen) {
+                BottomAppBar(
+                    containerColor = MaterialTheme.colorScheme.onBackground,
+                ) {
+                    navItems.forEach { item ->
+                        IconButton(
+                            onClick = {
+                                selected.intValue = item.icon
+                                navigationController.navigate(item.screen) {
+                                    popUpTo(0)
+                                }
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxSize()
                         ) {
-                            Icon(
-                                painter = painterResource(id = item.icon),
-                                contentDescription = item.label,
-                                modifier = Modifier.size(26.dp),
-                                tint = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
-                            )
-                            Text(
-                                text = item.label,
-                                color = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                                style = MaterialTheme.typography.labelSmall
-                            )
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = item.icon),
+                                    contentDescription = item.label,
+                                    modifier = Modifier.size(26.dp),
+                                    tint = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                                )
+                                Text(
+                                    text = item.label,
+                                    color = if (selected.intValue == item.icon) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
                         }
                     }
                 }
@@ -252,9 +257,10 @@ fun NavigationBar() {
             exitTransition = { fadeOut(animationSpec = tween(200)) }
         ) {
             composable(Screens.HomeScreen.screen) { HomeScreen() }
-            composable(Screens.CalendarScreen.screen) { CalendarScreen() }
+            composable(Screens.CalendarScreen.screen) { CalendarScreen(navigationController) }
             composable(Screens.FriendsScreen.screen) { FriendsScreen() }
             composable(Screens.GroupsScreen.screen) { GroupsScreen() }
+            composable(Screens.AddEventScreen.screen) { AddEventScreen(navigationController) }
         }
     }
 }
