@@ -2,13 +2,11 @@ package com.example.kotlin
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,21 +14,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.kotlin.Helper.ConnectionStatus
+import com.example.kotlin.Helper.currentConnectivityStatus
+import com.example.kotlin.Helper.observeConnectivityAsFlow
+import com.example.kotlin.datastore.SQLiteHelperFriends
 import com.example.kotlin.ui.theme.KotlinTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,6 +46,8 @@ data class Friend(val name: String, val avatarResId: Int)
 @Composable
 fun FriendsScreen() {
     val ctx = LocalContext.current
+    val sqliteHelperFriends = SQLiteHelperFriends(ctx) // Create an instance of SQLiteHelperFriends
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,6 +104,7 @@ fun FriendsScreen() {
         FriendList(
             friends = friends
         )
+        checkConnectivityStatus(friends, sqliteHelperFriends) // Pass the instance to the function
     }
 }
 
@@ -169,5 +173,44 @@ fun FriendItem(friend: Friend) {
             text = friend.name,
             style = MaterialTheme.typography.bodyMedium
         )
+    }
+}
+
+@ExperimentalCoroutinesApi
+@Composable
+fun connectivityStatus(): State<ConnectionStatus> {
+    val mCtx = LocalContext.current
+
+    return produceState(initialValue = mCtx.currentConnectivityStatus) {
+        mCtx.observeConnectivityAsFlow().collect { value = it }
+    }
+}
+
+
+
+
+@ExperimentalCoroutinesApi
+@Composable
+fun checkConnectivityStatus(friends: List<Friend>, sqliteHelperFriends: SQLiteHelperFriends){
+
+    val connection by connectivityStatus()
+
+    val isConnected = connection === ConnectionStatus.Available
+
+    if(isConnected)
+    {
+        /**lo que hace cuando no esta connectado **/
+        // Fetch friends data from the server when the composable is first created
+    }
+    else
+    {
+        /**lo que hace cuando no esta connectado **/
+        // Save the list of friends to the database
+        LazyColumn {
+            items(friends) { friend ->
+                FriendItem(friend = friend)
+                sqliteHelperFriends.insertFriend(friend.name, "") // Pass null for the number
+            }
+        }
     }
 }
