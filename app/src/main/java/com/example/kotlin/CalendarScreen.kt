@@ -29,17 +29,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import java.time.LocalDate
 import java.util.*
 import java.time.format.TextStyle as TextStyle1
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         CalendarView()
         FloatingActionButton(
-            onClick = { /*TODO: Handle click*/ },
+            onClick = { navController.navigate("add_event") },
             containerColor = Color.Transparent,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -303,7 +305,9 @@ fun Block(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(1.dp)
         )
         Text(
             text = text2,
@@ -317,7 +321,9 @@ fun Block(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
         )
     }
 }
@@ -375,7 +381,9 @@ fun BlockLym(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(1.dp)
         )
         Text(
             text = text2,
@@ -389,7 +397,9 @@ fun BlockLym(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
         )
     }
 }
@@ -440,7 +450,9 @@ fun BlockDSW(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(1.dp)
         )
         Text(
             text = text2,
@@ -454,7 +466,9 @@ fun BlockDSW(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
         )
     }
 }
@@ -505,7 +519,9 @@ fun BlockSoccer(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.TopStart).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(1.dp)
         )
         Text(
             text = text2,
@@ -519,7 +535,9 @@ fun BlockSoccer(
             color = Color.White,
             fontSize = 5.sp,
              fontWeight = FontWeight.Normal,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
         )
     }
 }
