@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,21 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.example.kotlin.Helper.ConnectionStatus
-import com.example.kotlin.Helper.currentConnectivityStatus
-import com.example.kotlin.Helper.observeConnectivityAsFlow
-import com.example.kotlin.datastore.SQLiteHelperGroups
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun GroupsScreen() {
-    val ctx = LocalContext.current
-    val sqliteHelperGroups = SQLiteHelperGroups(ctx) // Create an instance of SQLiteHelperFriends
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -173,81 +163,6 @@ fun GroupBox(element: Group) {
                     modifier = Modifier
                         .size(20.dp)
                 )
-            }
-            UserAvatars(element.userAvatars)
-            Text(
-                text = element.name,
-                modifier = Modifier.padding(start = 10.dp, top = 10.dp)
-            )
-        }
-    }
-}
-
-data class Group(
-    val name: String,
-    val primaryColor: Color,
-    val secondaryColor: Color,
-    val icon: Int,
-    val width: Int,
-    val userAvatars: List<Int>
-)
-
-@Composable
-fun UserAvatars(userAvatars: List<Int>) {
-    Row(
-        modifier = Modifier
-            .padding(start = 10.dp, top = 10.dp)
-            .size(40.dp),
-        horizontalArrangement = Arrangement.spacedBy((-10).dp)
-    ) {
-        userAvatars.forEachIndexed { index, avatarResId ->
-            Image(
-                painter = painterResource(id = avatarResId),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(30.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, Color.White, CircleShape)
-                    .offset(x = index * 20.dp)
-            )
-        }
-    }
-}
-
-@ExperimentalCoroutinesApi
-@Composable
-fun connectivityStatusGroup(): State<ConnectionStatus> {
-    val mCtx = LocalContext.current
-
-    return produceState(initialValue = mCtx.currentConnectivityStatus) {
-        mCtx.observeConnectivityAsFlow().collect { value = it }
-    }
-}
-
-
-
-
-@ExperimentalCoroutinesApi
-@Composable
-fun checkConnectivityStatusGroup(groups: List<Group>, sqliteHelperGroups: SQLiteHelperGroups){
-
-    val connection by connectivityStatus()
-
-    val isConnected = connection === ConnectionStatus.Available
-
-    if(isConnected)
-    {
-        /**lo que hace cuando no esta connectado **/
-        // Fetch friends data from the server when the composable is first created
-    }
-    else
-    {
-        /**lo que hace cuando no esta conectado **/
-        // Save the list of groups to the database
-        LazyColumn {
-            items(groups) { group ->
-                GroupBox(group)
-                sqliteHelperGroups.insertGroup(group.name, group.userAvatars.joinToString()) // Inserta el grupo en la base de datos
             }
             UserAvatars(element.userAvatars)
             Text(

@@ -10,33 +10,30 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.example.kotlin.Helper.ConnectionStatus
-import com.example.kotlin.Helper.currentConnectivityStatus
-import com.example.kotlin.Helper.observeConnectivityAsFlow
-import com.example.kotlin.datastore.SQLiteHelperFriends
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.kotlin.ui.theme.KotlinTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -52,67 +49,80 @@ data class Friend(val name: String, val avatarResId: Int)
 @Composable
 fun FriendsScreen() {
     val ctx = LocalContext.current
-    val sqliteHelperFriends = SQLiteHelperFriends(ctx) // Create an instance of SQLiteHelperFriends
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        TopButtons()
-        Spacer(modifier = Modifier.height(16.dp))
-        var query by remember { mutableStateOf("") }
-        var active by remember { mutableStateOf(false) }
-
-        SearchBar(
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = {
-                Toast.makeText(ctx, query, Toast.LENGTH_SHORT).show()
-                active = false
-            },
-            active = active,
-            onActiveChange = { active = it }
+    Box() {
+        FloatingActionButton(
+            onClick = { /*TODO*/ },
+            containerColor = Color.Transparent,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
         ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_square_plus),
+                contentDescription = "Add",
+                modifier = Modifier
+                    .size(60.dp) //
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            TopButtonsFriends()
+            Spacer(modifier = Modifier.height(16.dp))
+            var query by remember { mutableStateOf("") }
+            var active by remember { mutableStateOf(false) }
 
-        // Sample list of friends
-        val friends = listOf(
-            Friend("Friend 1", R.drawable.sticker),
-            Friend("Friend 2", R.drawable.sticker),
-            Friend("Friend 3", R.drawable.sticker),
-            Friend("Friend 4", R.drawable.sticker),
-            Friend("Friend 5", R.drawable.sticker),
-            Friend("Friend 6", R.drawable.sticker),
-            Friend("Friend 7", R.drawable.sticker),
-            Friend("Friend 8", R.drawable.sticker),
-            Friend("Friend 9", R.drawable.sticker),
-            Friend("Friend 10", R.drawable.sticker)
-        )
-        // Filtering the list of friends based on the query
-        if(query.isNotEmpty()){
-            val filteredFriends = friends.filter { it.name.contains(query, true) }
-            filteredFriends.forEach { (name, avatarResId) ->
-                Text(
-                    text ="$name $avatarResId",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .clickable {
-                            Toast
-                                .makeText(ctx, name, Toast.LENGTH_SHORT)
-                                .show()
-                            active = false
-                        }
-                )
+            SearchBar(
+                query = query,
+                onQueryChange = { query = it },
+                onSearch = {
+                    Toast.makeText(ctx, query, Toast.LENGTH_SHORT).show()
+                    active = false
+                },
+                active = active,
+                onActiveChange = { active = it }
+            ) {
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sample list of friends
+            val friends = listOf(
+                Friend("Friend 1", R.drawable.sticker),
+                Friend("Friend 2", R.drawable.sticker),
+                Friend("Friend 3", R.drawable.sticker),
+                Friend("Friend 4", R.drawable.sticker),
+                Friend("Friend 5", R.drawable.sticker),
+                Friend("Friend 6", R.drawable.sticker),
+                Friend("Friend 7", R.drawable.sticker),
+                Friend("Friend 8", R.drawable.sticker),
+                Friend("Friend 9", R.drawable.sticker),
+                Friend("Friend 10", R.drawable.sticker)
+            )
+            // Filtering the list of friends based on the query
+            if (query.isNotEmpty()) {
+                val filteredFriends = friends.filter { it.name.contains(query, true) }
+                filteredFriends.forEach { (name, avatarResId) ->
+                    Text(
+                        text = "$name $avatarResId",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable {
+                                Toast
+                                    .makeText(ctx, name, Toast.LENGTH_SHORT)
+                                    .show()
+                                active = false
+                            }
+                    )
+                }
+            }
+            FriendList(
+                friends = friends
+            )
         }
-        FriendList(
-            friends = friends
-        )
-        checkConnectivityStatus(friends, sqliteHelperFriends) // Pass the instance to the function
     }
 }
+
 
 @Composable
 fun TopButtonsFriends() {
@@ -127,14 +137,18 @@ fun TopButtonsFriends() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_bars),
-                tint = MaterialTheme.colorScheme.background,
+                tint = Color.Black,
                 contentDescription = "Burger",
                 modifier = Modifier.size(25.dp)
             )
         }
         Text(
             text = "Friends",
-            modifier = Modifier.padding(horizontal = 16.dp)
+            color = Color.Black,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+
         )
         IconButton(
             onClick = { /*TODO*/ },
@@ -142,7 +156,7 @@ fun TopButtonsFriends() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_bell),
-                tint = MaterialTheme.colorScheme.background,
+                tint = Color.Black,
                 contentDescription = "Notifications",
                 modifier = Modifier.size(25.dp)
             )
@@ -177,46 +191,8 @@ fun FriendItem(friend: Friend) {
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = friend.name,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Black
         )
-    }
-}
-
-@ExperimentalCoroutinesApi
-@Composable
-fun connectivityStatus(): State<ConnectionStatus> {
-    val mCtx = LocalContext.current
-
-    return produceState(initialValue = mCtx.currentConnectivityStatus) {
-        mCtx.observeConnectivityAsFlow().collect { value = it }
-    }
-}
-
-
-
-
-@ExperimentalCoroutinesApi
-@Composable
-fun checkConnectivityStatus(friends: List<Friend>, sqliteHelperFriends: SQLiteHelperFriends){
-
-    val connection by connectivityStatus()
-
-    val isConnected = connection === ConnectionStatus.Available
-
-    if(isConnected)
-    {
-        /**lo que hace cuando no esta connectado **/
-        // Fetch friends data from the server when the composable is first created
-    }
-    else
-    {
-        /**lo que hace cuando no esta connectado **/
-        // Save the list of friends to the database
-        LazyColumn {
-            items(friends) { friend ->
-                FriendItem(friend = friend)
-                sqliteHelperFriends.insertFriend(friend.name, "") // Pass null for the number
-            }
-        }
     }
 }
